@@ -28,8 +28,10 @@
     let letterDiv = wordNodeArray[letterPos] as HTMLElement;
     let letterDivBack = wordNodeArray[letterPos - 1] as HTMLElement;
     if (key == "Backspace" && letterPos != 0) {
+      wordNodeArray[letterPos - 1].classList.add("active");
+      wordNodeArray[letterPos].classList.remove("active");
       typeData.chars -= 1;
-      if (letterDivBack.style.color == "red") typeData.errors -= 1
+      if (letterDivBack.style.color == "red") typeData.errors -= 1;
       if (words[letterPos - 1] != " ") letterDivBack.style.color = "black";
       else {
         if (letterDivBack.style.backgroundColor == "red") {
@@ -39,11 +41,13 @@
       }
       letterPos -= 1;
     } else if (key.length == 1) {
+      wordNodeArray[letterPos + 1].classList.add("active");
+      wordNodeArray[letterPos].classList.remove("active");
       typeData.chars += 1;
       if (words[letterPos] == key) {
         if (words[letterPos] != " ") letterDiv.style.color = "pink";
       } else {
-        typeData.errors += 1
+        typeData.errors += 1;
         if (words[letterPos] == " ") {
           letterDiv.style.color = "red";
           letterDiv.style.backgroundColor = "red";
@@ -82,3 +86,25 @@
     {/each}
   </div>
 </div>
+
+<style>
+  .active::before {
+    content: "";
+    width: 1.5px;
+    height: 2rem;
+    background-color: black;
+    position: absolute;
+    animation: blink 1.2s infinite;
+  }
+  @keyframes blink {
+    0% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+</style>
