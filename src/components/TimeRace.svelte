@@ -1,13 +1,14 @@
 <script lang="ts">
-  import type { timeProps } from "$lib/types";
+  import type { TimeRaceProps } from "$lib/types";
 
   let {
-    start,
+    startTime,
     first = $bindable(),
+    finish,
     letterPos = $bindable(),
     wordNodeArray,
     typeData = $bindable(),
-  }: timeProps = $props();
+  }: TimeRaceProps = $props();
 
   let time = $state();
   let results = $state({
@@ -19,16 +20,16 @@
 
   const timer = () => {
     const futureTime = new Date(
-      start.getFullYear(),
-      start.getMonth(),
-      start.getDate(),
-      start.getHours(),
-      start.getMinutes(),
-      start.getSeconds() + 31
+      startTime.getFullYear(),
+      startTime.getMonth(),
+      startTime.getDate(),
+      startTime.getHours(),
+      startTime.getMinutes() + 2,
+      startTime.getSeconds() + 1
     );
     let now = new Date();
     let diff = (futureTime.getTime() - now.getTime()) / 1000;
-    time = Math.floor(diff) % 60;
+    time = Math.floor(diff);
     if (time == 0) {
       first = false;
       calculateResult();
@@ -45,6 +46,7 @@
 
   $effect(() => {
     if (first) interval = setInterval(timer, 1000);
+    if (finish) calculateResult();
   });
 
   timer();

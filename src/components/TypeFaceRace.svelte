@@ -6,11 +6,16 @@
   let {
     socket,
     data,
-  }: { socket: Socket; data: { user: string; roomId: string } } = $props();
+  }: {
+    socket: Socket;
+    data: { user: string; roomId: string };
+  } = $props();
 
   let first = $state<boolean | undefined>(undefined);
   let fault = $state<boolean>(false);
-  let start = $state<Date>(new Date());
+  let start = $state<boolean>(false);
+  let finish = $state<boolean>(false);
+  let startTime = $state<Date>(new Date());
   let words = $state<string[]>([""]);
   let typeData = $state({
     chars: 0,
@@ -19,21 +24,10 @@
   let letterPos = $state(0);
   let wordNodeArray = $state<HTMLCollectionOf<Element> | []>([]);
 
-  const fetchWords = async () => {
-    const data = await fetch(
-      `https://random-word-api.vercel.app/api?words=50&length=${4}`
-    ).then((res) => res.json());
-    words = data.flatMap((word: string) => {
-      let b = word.split("");
-      b.push(" ");
-      return b;
-    });
-  };
-
-  $inspect(fault, typeData);
+  $inspect(letterPos, typeData, words.length, finish);
 
   const check = (key: string) => {
-    if (!first) return;
+    if (!first || letterPos == wordNodeArray.length) return;
     let letterDiv = wordNodeArray[letterPos] as HTMLElement;
     let letterDivBack = wordNodeArray[letterPos - 1] as HTMLElement;
     if (key == "Backspace" && letterPos != 0) {
@@ -51,7 +45,8 @@
       if (fault) fault = false;
     } else if (key.length == 1) {
       if (fault) return;
-      wordNodeArray[letterPos + 1].classList.add("active");
+      if (letterPos + 1 < wordNodeArray.length)
+        wordNodeArray[letterPos + 1].classList.add("active");
       wordNodeArray[letterPos].classList.remove("active");
       typeData.chars += 1;
       if (words[letterPos] == key) {
@@ -75,19 +70,35 @@
   };
 
   if (browser) {
-    fetchWords();
     document.addEventListener("keyup", (e) => {
-      if (first == undefined) {
-        first = true;
-        start = new Date();
+      if (letterPos == words.length - 1) {
+        finish = true;
       }
+      if (first == undefined && words && start) first = true;
       check(e.key);
     });
     wordNodeArray = document.getElementsByClassName("letter");
   }
+  $effect(() => {
+    socket.on("join", (user, members, passage) => {
+      words = passage;
+    });
+    socket.on("start", () => {
+      console.log("starrrrtt");
+      start = true;
+      startTime = new Date();
+    });
+  });
 </script>
 
-<TimeRace {start} bind:first {wordNodeArray} bind:letterPos bind:typeData />
+<TimeRace
+  {startTime}
+  bind:first
+  {wordNodeArray}
+  bind:letterPos
+  bind:typeData
+  {finish}
+/>
 <div class="w-1/2 flex flex-wrap text-center justify-center select-none">
   {#each words as word}
     <span class={`text-2xl letter ${word.trim() ? "text-black" : "text-white"}`}

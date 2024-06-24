@@ -5,6 +5,7 @@
 
   let { data } = $props();
   let socket = $state<Socket>(io("http://localhost:3000"));
+
   $effect(() => {
     socket.connect();
     if (data.user) socket.emit("join", data.roomId, data.user);

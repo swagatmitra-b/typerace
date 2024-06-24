@@ -2,7 +2,7 @@
   import type { timeProps } from "$lib/types";
 
   let {
-    start,
+    startTime,
     first = $bindable(),
     letterPos = $bindable(),
     wordNodeArray,
@@ -19,12 +19,12 @@
 
   const timer = () => {
     const futureTime = new Date(
-      start.getFullYear(),
-      start.getMonth(),
-      start.getDate(),
-      start.getHours(),
-      start.getMinutes(),
-      start.getSeconds() + 31
+      startTime.getFullYear(),
+      startTime.getMonth(),
+      startTime.getDate(),
+      startTime.getHours(),
+      startTime.getMinutes(),
+      startTime.getSeconds() + 31
     );
     let now = new Date();
     let diff = (futureTime.getTime() - now.getTime()) / 1000;

@@ -1,5 +1,5 @@
 export type timeProps = {
-  start: Date;
+  startTime: Date;
   first: boolean | undefined;
   wordNodeArray: HTMLCollectionOf<Element> | [];
   letterPos: number;
@@ -8,6 +8,8 @@ export type timeProps = {
     errors: number;
   };
 };
+
+export type TimeRaceProps = timeProps & { finish: boolean };
 
 export type TypeData = {
   chars: number;

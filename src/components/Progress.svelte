@@ -23,8 +23,7 @@
     | "indigo" = "primary";
   export let labelInsideClass: string =
     "text-primary-100 text-xs font-medium text-center p-0.5 leading-none rounded-full";
-  export let divClass: string =
-    "w-full bg-gray-200 rounded-full dark:bg-gray-700";
+  export let divClass: string = "w-full bg-white rounded-full ";
 
   const _progress = tweened(0, {
     duration: animate ? tweenDuration : 0,
@@ -46,7 +45,7 @@
   $: _progress.set(Number(progress));
 </script>
 
-{#if labelOutside}
+<!-- {#if labelOutside}
   <div
     {...$$restProps}
     class={twMerge("flex justify-between mb-1", $$props.classLabelOutside)}
@@ -58,7 +57,7 @@
       >{progress}%</span
     >
   </div>
-{/if}
+{/if} -->
 <div class={twMerge(divClass, size, $$props.class)}>
   {#if labelInside}
     <div
@@ -74,20 +73,3 @@
     ></div>
   {/if}
 </div>
-
-<!--
-@component
-[Go to docs](https://flowbite-svelte.com/)
-## Props
-@prop export let progress: string | number = '45';
-@prop export let precision: number = 0
-  export let tweenDuration: number = 400;
-@prop export let animate: boolean = false;
-@prop export let size: string = 'h-2.5';
-@prop export let labelInside: boolean = false;
-@prop export let labelOutside: string = '';
-@prop export let easing: EasingFunction = cubicOut;
-@prop export let color: 'primary' | 'blue' | 'gray' | 'red' | 'green' | 'yellow' | 'purple' | 'indigo' = 'primary';
-@prop export let labelInsideClass: string = 'text-primary-100 text-xs font-medium text-center p-0.5 leading-none rounded-full';
-@prop export let divClass: string = 'w-full bg-gray-200 rounded-full dark:bg-gray-700';
--->
