@@ -47,6 +47,7 @@
     const button = e.target as HTMLButtonElement;
     button.blur();
     clearInterval(interval);
+    wordNodeArray[letterPos].classList.remove("active");
     first = undefined;
     results.net = 0;
     results.gross = 0;
@@ -73,8 +74,8 @@
 <div class="flex flex-col items-center">
   <h1>{time}</h1>
   <div class="flex flex-row">
-    Gross WPM: {results.gross}
-    Net WPM: {results.net}
+    Gross WPM: {results.gross.toFixed(0)}
+    Net WPM: {results.net.toFixed(0)}
     accuracy: {Number.isInteger(results.accuracy)
       ? results.accuracy
       : results.accuracy.toFixed(2)}%
