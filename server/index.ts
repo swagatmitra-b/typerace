@@ -49,7 +49,7 @@ io.on("connection", (socket) => {
       return;
     } else {
       const current = members.get(room) as string[];
-      if (current.includes(user)) return;
+      if (current.includes(user) || current.length > 4) return;
       current.push(user);
       socket.join(room);
       io.to(room).emit("join", user, current, passage.get(room));

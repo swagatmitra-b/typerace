@@ -1,5 +1,3 @@
-<script>
-</script>
 <div class="flex gap-2 justify-center w-full">
   <a
     href="/practice"
