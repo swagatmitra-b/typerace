@@ -2,18 +2,27 @@
   import TypeFaceRace from "../../../components/TypeFaceRace.svelte";
   import Paddock from "../../../components/Paddock.svelte";
   import { Socket, io } from "socket.io-client";
+  import { username } from "../../../stores/store";
 
+  let name = $state("");
+  username.subscribe((val) => (name = val));
   let { data } = $props();
-  let socket = $state<Socket>(io("http://localhost:3000"));
+  let details = $state(() => {
+    return {
+      user: name,
+      roomId: data.roomId,
+    };
+  });
+  let socket = $state<Socket>(io(data.url));
 
   $effect(() => {
     socket.connect();
-    if (data.user) socket.emit("join", data.roomId, data.user);
+    if (name) socket.emit("join", name, data.roomId);
     () => socket.disconnect();
   });
 </script>
 
 <div class="flex flex-col min-h-screen justify-center items-center w-full">
   <Paddock {socket} />
-  <TypeFaceRace {socket} {data} />
+  <TypeFaceRace {socket} data={details()} />
 </div>

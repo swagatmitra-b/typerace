@@ -1,20 +1,25 @@
 <script>
   import { username } from "../../stores/store";
   import { goto } from "$app/navigation";
+
   let user = $state("");
   let roomId = $state("");
+
   const joinRoom = () => {
     if (!user) return;
     goto(`/race/${roomId}`);
   };
+
   const createRoom = () => {
     if (!user) return;
     const id = Math.floor(Math.random() * (99999 - 10000 + 1)) + 10000;
     goto(`/race/${id}`);
   };
+
   $effect(() => {
     username.set(user);
   });
+
 </script>
 
 <main class="flex min-h-screen justify-center items-center">

@@ -10,7 +10,6 @@
   export let animate: boolean = false;
   export let size: string = "h-2.5";
   export let labelInside: boolean = false;
-  export let labelOutside: string = "";
   export let easing: EasingFunction = cubicOut;
   export let color:
     | "primary"
@@ -30,7 +29,6 @@
     easing,
   });
 
-  // let barColor: string;
   const barColors = {
     primary: "bg-primary-600",
     blue: "bg-blue-600",
@@ -45,19 +43,6 @@
   $: _progress.set(Number(progress));
 </script>
 
-<!-- {#if labelOutside}
-  <div
-    {...$$restProps}
-    class={twMerge("flex justify-between mb-1", $$props.classLabelOutside)}
-  >
-    <span class="text-base font-medium text-blue-700 dark:text-white"
-      >{labelOutside}</span
-    >
-    <span class="text-sm font-medium text-blue-700 dark:text-white"
-      >{progress}%</span
-    >
-  </div>
-{/if} -->
 <div class={twMerge(divClass, size, $$props.class)}>
   {#if labelInside}
     <div

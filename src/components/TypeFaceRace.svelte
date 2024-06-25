@@ -25,9 +25,10 @@
 
   const check = (key: string) => {
     if (!start || finish) return;
+
     let letterDiv = wordNodeArray[letterPos] as HTMLElement;
     let letterDivBack = wordNodeArray[letterPos - 1] as HTMLElement;
-    console.log(letterDiv, letterDivBack, letterPos);
+
     if (key == "Backspace" && letterPos != 0) {
       letterDivBack.classList.add("active");
       if (letterDiv) letterDiv.classList.remove("active");

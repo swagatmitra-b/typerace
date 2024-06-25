@@ -22,11 +22,9 @@ export const fetchWords = async (): Promise<string[]> => {
 app.use(cors());
 
 const server = createServer(app);
-// console.log(process.env.CLIENT_URL);
 const io = new Server(server, {
   cors: {
-    // origin: process.env.CLIENT_URL,
-    origin: "http://localhost:5173",
+    origin: `${process.env.CLIENT_URL}`,
     methods: "GET",
   },
 });
@@ -36,7 +34,8 @@ let passage: Map<string, string[]> = new Map();
 let ranking: Map<string, string[]> = new Map();
 
 io.on("connection", (socket) => {
-  socket.on("join", async (room, user) => {
+  socket.on("join", async (user, room) => {
+    console.log(user, room);
     if (!members.get(room)) {
       const p = await fetchWords();
       members.set(room, [user]);
