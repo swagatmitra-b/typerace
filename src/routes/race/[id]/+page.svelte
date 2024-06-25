@@ -3,6 +3,7 @@
   import Paddock from "../../../components/Paddock.svelte";
   import { Socket, io } from "socket.io-client";
   import { username } from "../../../stores/store";
+  import { browser } from "$app/environment";
 
   let name = $state("");
   username.subscribe((val) => (name = val));
@@ -14,6 +15,12 @@
     };
   });
   let socket = $state<Socket>(io(data.url));
+
+  if (browser) {
+    window.addEventListener("beforeunload", () => {
+      socket.emit("leave", name, data.roomId);
+    });
+  }
 
   $effect(() => {
     socket.connect();

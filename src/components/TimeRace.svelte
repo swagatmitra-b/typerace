@@ -27,10 +27,11 @@
       startTime.getMinutes() + 2,
       startTime.getSeconds() + 1
     );
+
     let now = new Date();
     let diff = (futureTime.getTime() - now.getTime()) / 1000;
     time = Math.floor(diff);
-    console.log(time);
+
     if (time == 0 || finish) {
       start = false;
       finish = true;

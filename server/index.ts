@@ -9,7 +9,6 @@ configDotenv();
 const app = express();
 const PORT = 3000;
 
-
 const getPassage = () => {
   const slot = Math.floor(Math.random() * passages.length);
   const p = passages[slot].split(" ");
@@ -68,6 +67,19 @@ io.on("connection", (socket) => {
       const len = ranking.get(room) as string[];
       len.push(user);
       io.to(room).emit("result", user, len.length, wpm);
+    }
+  });
+  socket.on("leave", (user, room) => {
+    let mem = members.get(room) as string[];
+    if (mem?.includes(user)) {
+      mem = mem.filter((p) => p != user);
+      if (mem.length) members.set(room, mem);
+      else {
+        members.delete(room);
+        pStore.delete(room);
+        ranking.delete(room);
+        delete full[room];
+      }
     }
   });
 });

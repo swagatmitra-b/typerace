@@ -3,7 +3,7 @@
   import { browser } from "$app/environment";
 
   let first = $state<boolean | undefined>(undefined);
-  let start = $state<Date>(new Date());
+  let startTime = $state<Date>(new Date());
   let words = $state<string[]>([""]);
   let typeData = $state({
     chars: 0,
@@ -64,7 +64,7 @@
     document.addEventListener("keyup", (e) => {
       if (first == undefined) {
         first = true;
-        start = new Date();
+        startTime = new Date();
       }
       check(e.key);
     });
@@ -72,7 +72,7 @@
   }
 </script>
 
-<Time {start} bind:first {wordNodeArray} bind:letterPos bind:typeData />
+<Time {startTime} bind:first {wordNodeArray} bind:letterPos bind:typeData />
 <div class="w-1/2 flex flex-wrap text-center justify-center select-none">
   {#each words as word}
     <span class={`text-2xl letter ${word.trim() ? "text-black" : "text-white"}`}
