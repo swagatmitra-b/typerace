@@ -69,7 +69,7 @@
 
   if (browser) {
     fetchWords();
-    document.addEventListener("keyup", (e) => {
+    document.addEventListener("keydown", (e) => {
       if (!start && !finish) {
         start = true;
         startTime = new Date();

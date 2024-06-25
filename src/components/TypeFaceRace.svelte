@@ -72,7 +72,7 @@
   };
 
   if (browser) {
-    document.addEventListener("keyup", (e) => {
+    document.addEventListener("keydown", (e) => {
       check(e.key);
     });
     wordNodeArray = document.getElementsByClassName("letter");
