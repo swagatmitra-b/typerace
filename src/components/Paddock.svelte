@@ -9,8 +9,6 @@
   let progress = $state<{ [K: string]: number }>({});
   let rankings = $state<{ [K: string]: [string, number] }>({});
 
-  // $inspect(racers, progress);
-
   $effect(() => {
     socket.on("join", (user, members) => {
       racers = members;
@@ -24,7 +22,7 @@
     });
     socket.on("result", (user, pos, wpm) => {
       let position = getPosition(pos);
-      rankings[user] = [position, Math.floor(wpm)];
+      rankings[user] = [position, wpm]
     });
   });
 
@@ -53,18 +51,18 @@
     {@render lightsout(start)}
     {@render lightsout(start)}
   </div>
-  <div class="">
+  <div class="flex flex-col ">
     {#each racers as racer}
-      <div class="flex gap-2 justify-between items-center">
+      <div class="flex gap-2 items-center ">
         <span class="w-1/5">{racer}</span>
         <Progress
           animate
-          progress={progress[racer]}
+          progress={progress[racer] ? progress[racer] : 0}
           color="blue"
           class="border border-black"
         />
         {#if rankings[racer]}
-          <div class="flex items-center justify-center text-sm gap-2">
+          <div class="flex items-center text-sm gap-2 w-1/6">
             <span class="font-semibold">
               {rankings[racer][0]}
             </span>

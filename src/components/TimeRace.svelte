@@ -35,7 +35,7 @@
       finish = true;
       elapsed = (120 - time) / 60;
       calculateResult();
-      socket.emit("finish", data.user, data.roomId, results.wpm);
+      socket.emit("finish", data.user, data.roomId, Math.floor(results.wpm));
       clearInterval(interval);
     }
   };
@@ -56,7 +56,7 @@
 <div class="flex flex-col items-center">
   <h1>{time}</h1>
   <div class="flex flex-row">
-    WPM: {results.wpm.toFixed(0)}
+    WPM: {Math.floor(results.wpm)}
     accuracy: {Number.isInteger(results.accuracy)
       ? results.accuracy
       : results.accuracy.toFixed(2)}%
