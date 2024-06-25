@@ -2,7 +2,9 @@
   import Time from "./Time.svelte";
   import { browser } from "$app/environment";
 
-  let first = $state<boolean | undefined>(undefined);
+  // let first = $state<boolean | undefined>(undefined);
+  let start = $state<boolean>(false);
+  let finish = $state<boolean>(false);
   let startTime = $state<Date>(new Date());
   let words = $state<string[]>([""]);
   let typeData = $state({
@@ -14,7 +16,7 @@
 
   const fetchWords = async () => {
     const data = await fetch(
-      `https://random-word-api.vercel.app/api?words=50&length=${4}`
+      `https://random-word-api.vercel.app/api?words=60&length=${4}`
     ).then((res) => res.json());
     words = data.flatMap((word: string) => {
       let b = word.split("");
@@ -23,13 +25,15 @@
     });
   };
 
+  $inspect(letterPos, words.length);
+
   const check = (key: string) => {
-    if (!first) return;
+    if (!start || finish) return;
     let letterDiv = wordNodeArray[letterPos] as HTMLElement;
     let letterDivBack = wordNodeArray[letterPos - 1] as HTMLElement;
     if (key == "Backspace" && letterPos != 0) {
-      wordNodeArray[letterPos - 1].classList.add("active");
-      wordNodeArray[letterPos].classList.remove("active");
+      letterDivBack.classList.add("active");
+      if (letterDiv) letterDiv.classList.remove("active");
       typeData.chars -= 1;
       if (letterDivBack.style.color == "red") typeData.errors -= 1;
       if (words[letterPos - 1] != " ") letterDivBack.style.color = "black";
@@ -41,8 +45,9 @@
       }
       letterPos -= 1;
     } else if (key.length == 1) {
-      wordNodeArray[letterPos + 1].classList.add("active");
-      wordNodeArray[letterPos].classList.remove("active");
+      if (letterPos + 1 < wordNodeArray.length)
+        wordNodeArray[letterPos + 1].classList.add("active");
+      letterDiv.classList.remove("active");
       typeData.chars += 1;
       if (words[letterPos] == key) {
         if (words[letterPos] != " ") letterDiv.style.color = "pink";
@@ -56,14 +61,17 @@
         }
       }
       letterPos += 1;
-    } else return;
+    }
+    if (letterPos == words.length - 1) {
+      finish = true;
+    }
   };
-  $inspect(first, typeData);
+
   if (browser) {
     fetchWords();
     document.addEventListener("keyup", (e) => {
-      if (first == undefined) {
-        first = true;
+      if (!start && !finish) {
+        start = true;
         startTime = new Date();
       }
       check(e.key);
@@ -72,7 +80,14 @@
   }
 </script>
 
-<Time {startTime} bind:first {wordNodeArray} bind:letterPos bind:typeData />
+<Time
+  {startTime}
+  bind:start
+  bind:finish
+  {wordNodeArray}
+  bind:letterPos
+  bind:typeData
+/>
 <div class="w-1/2 flex flex-wrap text-center justify-center select-none">
   {#each words as word}
     <span class={`text-2xl letter ${word.trim() ? "text-black" : "text-white"}`}

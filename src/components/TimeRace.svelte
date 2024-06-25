@@ -59,7 +59,7 @@
   <h1>{time}</h1>
   <div class="flex flex-row">
     WPM: {Math.floor(results.wpm)}
-    accuracy: {Number.isInteger(results.accuracy)
+    Accuracy: {Number.isInteger(results.accuracy)
       ? results.accuracy
       : results.accuracy.toFixed(2)}%
   </div>

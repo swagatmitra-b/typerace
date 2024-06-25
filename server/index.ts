@@ -46,7 +46,7 @@ io.on("connection", (socket) => {
       setTimeout(() => {
         io.to(room).emit("start");
         full[room] = true;
-      }, 1000);
+      }, 10000);
       return;
     } else {
       const current = members.get(room) as string[];

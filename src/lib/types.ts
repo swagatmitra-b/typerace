@@ -2,7 +2,8 @@ import type { Socket } from "socket.io-client";
 
 export type timeProps = {
   startTime: Date;
-  first: boolean | undefined;
+  start: boolean;
+  finish: boolean;
   wordNodeArray: HTMLCollectionOf<Element> | [];
   letterPos: number;
   typeData: {
