@@ -7,6 +7,7 @@
   let racers = $state<string[]>([]);
   let start = $state(false);
   let progress = $state<{ [K: string]: number }>({});
+  let rankings = $state<{ [K: string]: [string, number] }>({});
 
   // $inspect(racers, progress);
 
@@ -16,13 +17,29 @@
       progress[user] = 0;
     });
     socket.on("typing", (user: string, typeData: TypeData) => {
-      // console.log(user, typeData);
       progress[user] = (typeData.chars / typeData.totalChars) * 100;
     });
     socket.on("start", () => {
       start = true;
     });
+    socket.on("result", (user, pos, wpm) => {
+      let position = getPosition(pos);
+      rankings[user] = [position, Math.floor(wpm)];
+    });
   });
+
+  const getPosition = (pos: number) => {
+    switch (pos) {
+      case 1:
+        return "1st";
+      case 2:
+        return "2nd";
+      case 3:
+        return "3rd";
+      default:
+        return `${pos}th`;
+    }
+  };
 </script>
 
 <div class="flex flex-col gap-2 p-3 w-1/2">
@@ -39,7 +56,7 @@
   </div>
   <div class="">
     {#each racers as racer}
-      <div class="flex gap-2 justify-between items-center">
+      <div class="flex gap-2 justify-between items-center bg-red-500 p-1">
         <span class="w-1/5">{racer}</span>
         <Progress
           animate
@@ -47,6 +64,16 @@
           color="blue"
           class="border border-black"
         />
+        {#if rankings[racer]}
+          <div class="flex flex-col text-sm">
+            <span class="font-semibold">
+              {rankings[racer][0]}
+            </span>
+            <span>
+              {rankings[racer][1]} wpm
+            </span>
+          </div>
+        {/if}
       </div>
     {/each}
   </div>

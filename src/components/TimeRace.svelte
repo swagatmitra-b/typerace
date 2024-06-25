@@ -3,20 +3,23 @@
 
   let {
     startTime,
-    first = $bindable(),
+    start = $bindable(),
     finish,
-    letterPos = $bindable(),
-    wordNodeArray,
+    data,
+    socket,
     typeData = $bindable(),
   }: TimeRaceProps = $props();
 
-  let time = $state();
+  let time = $state<number>();
+  let elapsed = $state(0);
   let results = $state({
-    gross: 0,
-    net: 0,
+    wpm: 0,
     accuracy: 0,
   });
   let interval: number;
+
+  $inspect(finish);
+  console.log(data)
 
   const timer = () => {
     const futureTime = new Date(
@@ -30,23 +33,24 @@
     let now = new Date();
     let diff = (futureTime.getTime() - now.getTime()) / 1000;
     time = Math.floor(diff);
-    if (time == 0) {
-      first = false;
+    if (time == 0 || finish) {
+      start = false;
+      finish = true;
+      elapsed = (120 - time) / 60;
       calculateResult();
+      socket.emit("finish", data.user, data.roomId, results.wpm);
       clearInterval(interval);
     }
   };
 
   const calculateResult = () => {
-    results.gross = typeData.chars / (5 * 0.5);
-    results.net = results.gross - typeData.errors / 0.5;
+    results.wpm = typeData.chars / (5 * elapsed);
     results.accuracy =
       ((typeData.chars - typeData.errors) / typeData.chars) * 100;
   };
 
   $effect(() => {
-    if (first) interval = setInterval(timer, 1000);
-    if (finish) calculateResult();
+    if (start) interval = setInterval(timer, 1000);
   });
 
   timer();
@@ -55,8 +59,7 @@
 <div class="flex flex-col items-center">
   <h1>{time}</h1>
   <div class="flex flex-row">
-    Gross WPM: {results.gross.toFixed(0)}
-    Net WPM: {results.net.toFixed(0)}
+    WPM: {results.wpm.toFixed(0)}
     accuracy: {Number.isInteger(results.accuracy)
       ? results.accuracy
       : results.accuracy.toFixed(2)}%

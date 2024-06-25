@@ -11,7 +11,6 @@
     data: { user: string; roomId: string };
   } = $props();
 
-  let first = $state<boolean | undefined>(undefined);
   let fault = $state<boolean>(false);
   let start = $state<boolean>(false);
   let finish = $state<boolean>(false);
@@ -24,10 +23,10 @@
   let letterPos = $state(0);
   let wordNodeArray = $state<HTMLCollectionOf<Element> | []>([]);
 
-  $inspect(letterPos, typeData, words.length, finish);
+  // $inspect(letterPos, typeData, words.length, finish);
 
   const check = (key: string) => {
-    if (!first || letterPos == wordNodeArray.length) return;
+    if (!start || letterPos == wordNodeArray.length) return;
     let letterDiv = wordNodeArray[letterPos] as HTMLElement;
     let letterDivBack = wordNodeArray[letterPos - 1] as HTMLElement;
     if (key == "Backspace" && letterPos != 0) {
@@ -74,7 +73,6 @@
       if (letterPos == words.length - 1) {
         finish = true;
       }
-      if (first == undefined && words && start) first = true;
       check(e.key);
     });
     wordNodeArray = document.getElementsByClassName("letter");
@@ -91,14 +89,7 @@
   });
 </script>
 
-<TimeRace
-  {startTime}
-  bind:first
-  {wordNodeArray}
-  bind:letterPos
-  bind:typeData
-  {finish}
-/>
+<TimeRace {startTime} {socket} {data} bind:start bind:typeData {finish} />
 <div class="w-1/2 flex flex-wrap text-center justify-center select-none">
   {#each words as word}
     <span class={`text-2xl letter ${word.trim() ? "text-black" : "text-white"}`}

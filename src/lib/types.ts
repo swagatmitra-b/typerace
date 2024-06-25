@@ -1,3 +1,5 @@
+import type { Socket } from "socket.io-client";
+
 export type timeProps = {
   startTime: Date;
   first: boolean | undefined;
@@ -9,7 +11,20 @@ export type timeProps = {
   };
 };
 
-export type TimeRaceProps = timeProps & { finish: boolean };
+export type TimeRaceProps = {
+  startTime: Date;
+  socket: Socket;
+  typeData: {
+    chars: number;
+    errors: number;
+  };
+  start: boolean;
+  finish: boolean;
+  data: {
+    user: string
+    roomId: string
+  }
+};
 
 export type TypeData = {
   chars: number;

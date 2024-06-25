@@ -31,8 +31,9 @@ const io = new Server(server, {
   },
 });
 
-const members: Map<string, string[]> = new Map();
+let members: Map<string, string[]> = new Map();
 let passage: Map<string, string[]> = new Map();
+let ranking: Map<string, string[]> = new Map();
 
 io.on("connection", (socket) => {
   socket.on("join", async (room, user) => {
@@ -43,10 +44,9 @@ io.on("connection", (socket) => {
       passage.set(room, p.splice(0, 8));
       socket.join(room);
       io.to(room).emit("join", user, [user], passage.get(room));
-      io.to(room);
       setTimeout(() => {
         io.to(room).emit("start");
-      }, 1000);
+      }, 20000);
       return;
     } else {
       const current = members.get(room) as string[];
@@ -58,6 +58,19 @@ io.on("connection", (socket) => {
   });
   socket.on("type", (user, room, typeData) => {
     io.to(room).emit("typing", user, typeData);
+  });
+  socket.on("finish", (user, room, wpm) => {
+    console.log(user, room, wpm)
+    if (!ranking.get(room)) {
+      console.log("finish1")
+      ranking.set(room, [user]);
+      io.to(room).emit("result", user, 1, wpm);
+    } else {
+      console.log("finish2")
+      const len = ranking.get(room) as string[];
+      len.push(user);
+      io.to(room).emit("result", user, len.length, wpm);
+    }
   });
 });
 
