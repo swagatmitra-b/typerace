@@ -46,7 +46,7 @@
       if (fault) return;
       if (letterPos + 1 < wordNodeArray.length)
         wordNodeArray[letterPos + 1].classList.add("active");
-      letterDiv.classList.remove("active");
+      wordNodeArray[letterPos].classList.remove("active");
       typeData.chars += 1;
       if (words[letterPos] == key) {
         if (words[letterPos] != " ") letterDiv.style.color = "pink";
