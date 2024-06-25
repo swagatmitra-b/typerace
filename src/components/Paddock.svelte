@@ -42,21 +42,20 @@
   };
 </script>
 
+{#snippet lightsout(start)}
+    <div
+      class={`lightsout border border-black w-8 h-8 ${start ? "bg-green-500" : "bg-red-500"}`}
+    ></div>
+{/snippet}
 <div class="flex flex-col gap-2 p-3 w-1/2">
   <div class="flex justify-center">
-    <div
-      class={`lightsout border border-black w-8 h-8 ${start ? "bg-green-500" : "bg-red-500"}`}
-    ></div>
-    <div
-      class={`lightsout border border-black w-8 h-8 ${start ? "bg-green-500" : "bg-red-500"}`}
-    ></div>
-    <div
-      class={`lightsout border border-black w-8 h-8 ${start ? "bg-green-500" : "bg-red-500"}`}
-    ></div>
+    {@render lightsout(start)}
+    {@render lightsout(start)}
+    {@render lightsout(start)}
   </div>
   <div class="">
     {#each racers as racer}
-      <div class="flex gap-2 justify-between items-center bg-red-500 p-1">
+      <div class="flex gap-2 justify-between items-center">
         <span class="w-1/5">{racer}</span>
         <Progress
           animate
@@ -65,7 +64,7 @@
           class="border border-black"
         />
         {#if rankings[racer]}
-          <div class="flex flex-col text-sm">
+          <div class="flex items-center justify-center text-sm gap-2">
             <span class="font-semibold">
               {rankings[racer][0]}
             </span>

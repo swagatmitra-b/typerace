@@ -18,9 +18,6 @@
   });
   let interval: number;
 
-  $inspect(finish);
-  console.log(data)
-
   const timer = () => {
     const futureTime = new Date(
       startTime.getFullYear(),

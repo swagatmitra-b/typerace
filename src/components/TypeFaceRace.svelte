@@ -23,15 +23,14 @@
   let letterPos = $state(0);
   let wordNodeArray = $state<HTMLCollectionOf<Element> | []>([]);
 
-  // $inspect(letterPos, typeData, words.length, finish);
-
   const check = (key: string) => {
-    if (!start || letterPos == wordNodeArray.length) return;
+    if (!start || finish) return;
     let letterDiv = wordNodeArray[letterPos] as HTMLElement;
     let letterDivBack = wordNodeArray[letterPos - 1] as HTMLElement;
+    console.log(letterDiv, letterDivBack, letterPos);
     if (key == "Backspace" && letterPos != 0) {
-      wordNodeArray[letterPos - 1].classList.add("active");
-      wordNodeArray[letterPos].classList.remove("active");
+      letterDivBack.classList.add("active");
+      if (letterDiv) letterDiv.classList.remove("active");
       typeData.chars -= 1;
       if (words[letterPos - 1] != " ") letterDivBack.style.color = "black";
       else {
@@ -66,13 +65,13 @@
       ...typeData,
       totalChars: words.length,
     });
+    if (letterPos == words.length && !fault) {
+      finish = true;
+    }
   };
 
   if (browser) {
     document.addEventListener("keyup", (e) => {
-      if (letterPos == words.length - 1) {
-        finish = true;
-      }
       check(e.key);
     });
     wordNodeArray = document.getElementsByClassName("letter");
@@ -82,7 +81,6 @@
       words = passage;
     });
     socket.on("start", () => {
-      console.log("starrrrtt");
       start = true;
       startTime = new Date();
     });
