@@ -88,10 +88,10 @@
   });
 </script>
 
-<TimeRace {startTime} {socket} {data} bind:start bind:typeData {finish} />
-<div class="w-1/2 flex flex-wrap text-center justify-center select-none">
+<TimeRace {startTime} {socket} {data} bind:start bind:typeData bind:finish />
+<div class="w-1/2 flex flex-wrap text-center justify-center select-none mt-8">
   {#each words as word}
-    <span class={`text-2xl letter ${word.trim() ? "text-black" : "text-white"}`}
+    <span class={`text-xl letter ${word.trim() ? "text-black" : "text-white"}`}
       >{word.trim() ? word : "$"}</span
     >
   {/each}

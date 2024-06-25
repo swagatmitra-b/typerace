@@ -4,7 +4,7 @@
   let {
     startTime,
     start = $bindable(),
-    finish,
+    finish = $bindable(),
     data,
     socket,
     typeData = $bindable(),
@@ -30,6 +30,7 @@
     let now = new Date();
     let diff = (futureTime.getTime() - now.getTime()) / 1000;
     time = Math.floor(diff);
+    console.log(time);
     if (time == 0 || finish) {
       start = false;
       finish = true;

@@ -22,7 +22,7 @@
   });
 </script>
 
-<div class="flex flex-col min-h-screen justify-center items-center w-full">
+<div class="flex flex-col min-h-screen pt-20 items-center w-full">
   <Paddock {socket} />
   <TypeFaceRace {socket} data={details()} />
 </div>

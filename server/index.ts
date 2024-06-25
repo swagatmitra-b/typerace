@@ -3,18 +3,19 @@ import { createServer } from "http";
 import cors from "cors";
 import { Server } from "socket.io";
 import { configDotenv } from "dotenv";
+import { passages } from "./passages";
 
 configDotenv();
 const app = express();
 const PORT = 3000;
 
-export const fetchWords = async (): Promise<string[]> => {
-  const data = await fetch(
-    `https://random-word-api.vercel.app/api?words=60&length=${4}`
-  ).then((res) => res.json());
-  return data.flatMap((word: string, i: number) => {
+
+const getPassage = () => {
+  const slot = Math.floor(Math.random() * passages.length);
+  const p = passages[slot].split(" ");
+  return p.flatMap((word: string, i: number) => {
     let b = word.split("");
-    if (i != data.length - 1) b.push(" ");
+    if (i != p.length - 1) b.push(" ");
     return b;
   });
 };
@@ -30,30 +31,30 @@ const io = new Server(server, {
 });
 
 let members: Map<string, string[]> = new Map();
-let passage: Map<string, string[]> = new Map();
+let pStore: Map<string, string[]> = new Map();
 let ranking: Map<string, string[]> = new Map();
 let full: { [K: string]: boolean } = {};
 
 io.on("connection", (socket) => {
   socket.on("join", async (user, room) => {
     if (!members.get(room)) {
-      const p = await fetchWords();
+      const p = getPassage();
       members.set(room, [user]);
-      passage.set(room, p);
+      pStore.set(room, p);
       full[room] = false;
       socket.join(room);
-      io.to(room).emit("join", user, [user], passage.get(room));
+      io.to(room).emit("join", user, [user], pStore.get(room));
       setTimeout(() => {
         io.to(room).emit("start");
         full[room] = true;
-      }, 10000);
+      }, 1000);
       return;
     } else {
       const current = members.get(room) as string[];
       if (current.includes(user) || current.length > 4 || full[room]) return;
       current.push(user);
       socket.join(room);
-      io.to(room).emit("join", user, current, passage.get(room));
+      io.to(room).emit("join", user, current, pStore.get(room));
     }
   });
   socket.on("type", (user, room, typeData) => {

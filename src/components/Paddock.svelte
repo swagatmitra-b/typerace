@@ -51,7 +51,7 @@
     {@render lightsout(start)}
     {@render lightsout(start)}
   </div>
-  <div class="flex flex-col ">
+  <div class="flex flex-col">
     {#each racers as racer}
       <div class="flex gap-2 items-center ">
         <span class="w-1/5">{racer}</span>
