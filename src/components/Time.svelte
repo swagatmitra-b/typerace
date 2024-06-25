@@ -40,8 +40,6 @@
     }
   };
 
-  $inspect(start);
-
   const calculateResult = () => {
     results.gross = typeData.chars / (5 * elapsed);
     results.net = results.gross - typeData.errors / elapsed;
