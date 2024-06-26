@@ -12,6 +12,7 @@
   } = $props();
 
   let fault = $state<boolean>(false);
+  let loading = $state<boolean>(true);
   let start = $state<boolean>(false);
   let finish = $state<boolean>(false);
   let startTime = $state<Date>(new Date());
@@ -46,7 +47,7 @@
       if (fault) return;
       if (letterPos + 1 < wordNodeArray.length)
         wordNodeArray[letterPos + 1].classList.add("active");
-      wordNodeArray[letterPos].classList.remove("active");
+      letterDiv.classList.remove("active");
       typeData.chars += 1;
       if (words[letterPos] == key) {
         if (words[letterPos] != " ") letterDiv.style.color = "pink";
@@ -79,6 +80,7 @@
   }
   $effect(() => {
     socket.on("join", (user, members, passage) => {
+      loading = false;
       words = passage;
     });
     socket.on("start", () => {
@@ -90,11 +92,16 @@
 
 <TimeRace {startTime} {socket} {data} bind:start bind:typeData bind:finish />
 <div class="w-1/2 flex flex-wrap text-center justify-center select-none mt-8">
-  {#each words as word}
-    <span class={`text-xl letter ${word.trim() ? "text-black" : "text-white"}`}
-      >{word.trim() ? word : "$"}</span
-    >
-  {/each}
+  {#if loading}
+    <h1 class="text-md">Loading...</h1>
+  {:else}
+    {#each words as word}
+      <span
+        class={`text-xl letter ${word.trim() ? "text-black" : "text-white"}`}
+        >{word.trim() ? word : "$"}</span
+      >
+    {/each}
+  {/if}
 </div>
 
 <style>

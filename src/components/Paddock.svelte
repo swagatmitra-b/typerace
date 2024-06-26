@@ -51,6 +51,7 @@
     {@render lightsout(start)}
     {@render lightsout(start)}
   </div>
+  <h1 class={`text-center my-4 ${start ? "text-white": "text-black"} select-none`}>Wait for the lights to go green</h1> 
   <div class="flex flex-col">
     {#each racers as racer}
       <div class="flex gap-2 items-center ">

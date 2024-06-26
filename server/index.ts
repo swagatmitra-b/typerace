@@ -10,8 +10,8 @@ const app = express();
 const PORT = 3000;
 
 const getPassage = () => {
-  // const slot = Math.floor(Math.random() * passages.length);
-  const slot = passages.length - 1;
+  const slot = Math.floor(Math.random() * passages.length);
+  // const slot = passages.length - 1;
   const p = passages[slot].split(" ");
   return p.flatMap((word: string, i: number) => {
     let b = word.split("");
