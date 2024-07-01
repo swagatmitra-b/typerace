@@ -17,6 +17,7 @@
   let finish = $state<boolean>(false);
   let startTime = $state<Date>(new Date());
   let words = $state<string[]>([""]);
+  let by = $state<string>("");
   let typeData = $state({
     chars: 0,
     errors: 0,
@@ -81,7 +82,8 @@
   $effect(() => {
     socket.on("join", (user, members, passage) => {
       loading = false;
-      words = passage;
+      words = passage[0];
+      by = passage[1];
     });
     socket.on("start", () => {
       start = true;
@@ -103,6 +105,12 @@
     {/each}
   {/if}
 </div>
+{#if finish}
+  <p class="mt-5 text-lg">
+    You typed an excerpt from
+    <span class="italic">{by}</span>
+  </p>
+{/if}
 
 <style>
   .active::before {

@@ -9,15 +9,18 @@ configDotenv();
 const app = express();
 const PORT = 3000;
 
-const getPassage = () => {
+const getPassage = (): [string[], string] => {
   const slot = Math.floor(Math.random() * passages.length);
   // const slot = passages.length - 1;
-  const p = passages[slot].split(" ");
-  return p.flatMap((word: string, i: number) => {
-    let b = word.split("");
-    if (i != p.length - 1) b.push(" ");
-    return b;
-  });
+  const p = passages[slot][0].split(" ");
+  return [
+    p.flatMap((word: string, i: number) => {
+      let b = word.split("");
+      if (i != p.length - 1) b.push(" ");
+      return b;
+    }),
+    passages[slot][1],
+  ];
 };
 
 app.use(cors());
@@ -38,12 +41,12 @@ let full: { [K: string]: boolean } = {};
 io.on("connection", (socket) => {
   socket.on("join", async (user, room) => {
     if (!members.get(room)) {
-      const p = getPassage();
+      const [p, by] = getPassage();
       members.set(room, [user]);
       pStore.set(room, p);
       full[room] = false;
       socket.join(room);
-      io.to(room).emit("join", user, [user], pStore.get(room));
+      io.to(room).emit("join", user, [user], [pStore.get(room), by]);
       setTimeout(() => {
         io.to(room).emit("start");
         full[room] = true;
