@@ -79,4 +79,8 @@ export const passages = [
     "In many ways, the work of a critic is easy. We risk very little, yet enjoy a position over those who offer up their work and their selves to our judgment. We thrive on negative criticism, which is fun to write and to read. But the bitter truth we critics must face, is that in the grand scheme of things, the average piece of junk is probably more meaningful than our criticism designating it so. But there are times when a critic truly risks something, and that is in the discovery and defense of the *new*. The world is often unkind to new talent, new creations. The new needs friends.",
     "Ratatouille",
   ],
+  [
+    "If the mortgage bonds were the match, and the CDOs were the kerosene soaked rags, then the synthetic CDO was the atomic bomb with the drunk President holding his finger over the button. It was at that moment, in that dumb restaurant, with that stupid look on his face that Mark Baum realized the whole world economy might collapse.",
+    "The Big Short",
+  ],
 ];
